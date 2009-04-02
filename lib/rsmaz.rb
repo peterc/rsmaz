@@ -88,16 +88,16 @@ module RSmaz
   
   # Compress a string to Smaz encoding
   def self.compress(input)
-    h1, h2, h3 = 0
     verb = ""
     out = ""
+    input = input.dup
     
     # This algorithm has been ported to Ruby from C and only
     # slightly Rubyized.. still a lonnnng way to go. Wanna give it a crack?
     while (input && input.length > 0)
       h1 = h2 = input.ord << 3
       h2 += input[1,1].ord if (input.length > 1)
-      h3 = h2 ^ input[2,1].ord if (input.length > 2)
+      h3 = (input.length > 2) ? h2 ^ input[2,1].ord : 0
       q = []
 
       [input.length, 7].min.downto(1) do |j|
@@ -112,22 +112,31 @@ module RSmaz
         while (slot && slot[0]) do
           if (slot.ord == j && (slot[1,j] == input[0,j]))
             # Match found in hash table
-            q << verb
-            verb = ""
+            
+            # Add verbatim data, if any (yes, it's quicker with the check)
+            unless verb.empty?
+              q << verb
+              verb = ""
+            end
+            
+            # Add encoded data and ditch unnecessary part of input string
             q << slot[slot.ord+1,1].ord
-            input = input[j..-1]
+            input.slice!(0..j-1)
             break
           else
             # This in-place hack is quicker than slot = slot[1..-1]
+            
             slot.reverse!.chop!.reverse!
+            #slot.slice!(0)
+            #slot[0] = ''
           end
         end
       end
       
       # No queue? It means we matched nothing, so add the current byte to the verbatim buffer
       if q.empty?
-        verb << input.ord if input[0]
-        input = input[1..-1]
+        verb << input[0,1] if input[0]
+        input.slice!(0)
       end
 
       # If the verbatim buffer is getting too long or we're at the end of the doc
