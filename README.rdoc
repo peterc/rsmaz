@@ -21,7 +21,7 @@
 * Some strings to compress
 * A sense of humor
 
-== INSTALL:
+== USAGE:
 
   require 'rsmaz'
   r = RSmaz.compress("whatever")
