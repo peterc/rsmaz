@@ -3,10 +3,12 @@ $:.unshift(File.dirname(__FILE__)) unless
 
 require 'strscan'
 
-# RSmaz is too small to bother splitting into separate files, so I'll be lazy..
+# Silly hack to allow usage of String#ord in Ruby 1.9 without breaking Ruby 1.8
+class Fixnum; def ord; self; end; end
 
+# RSmaz is too small to bother splitting into separate files, so I'll be lazy..
 module RSmaz
-  VERSION = '0.0.1'
+  VERSION = '0.0.2'
   
   # From http://github.com/antirez/smaz/blob/4b913924e15b7663ee0240af19cedfd266052aab/smaz.c
   CODEBOOK = ["\002s,\266", "\003had\232\002leW", "\003on \216", "", "\001yS",
@@ -89,9 +91,9 @@ module RSmaz
     # This algorithm has been ported to Ruby from C and only
     # slightly Rubyized.. still a lonnnng way to go. Wanna give it a crack?
     while (input && input.length > 0)
-      h1 = h2 = input[0] << 3
-      h2 += input[1] if (input.length > 1)
-      h3 = h2 ^ input[2] if (input.length > 2)
+      h1 = h2 = input[0].ord << 3
+      h2 += input[1].ord if (input.length > 1)
+      h3 = h2 ^ input[2].ord if (input.length > 2)
       q = []
 
       [input.length, 7].min.downto(1) do |j2|
@@ -104,11 +106,11 @@ module RSmaz
         end
 
         while (slot && slot[0]) do
-          if (slot[0] == j2 && (slot[1,j2] == input[0,j2]))
+          if (slot[0].ord == j2 && (slot[1,j2] == input[0,j2]))
             # Match found in hash table
             q << verb
             verb = ""
-            q << slot[slot[0]+1]
+            q << slot[slot[0].ord+1].ord
             input = input[j2..-1]
           else
             slot = slot[2..-1]
@@ -118,7 +120,7 @@ module RSmaz
       
       # No queue? It means we matched nothing, so add the current byte to the verbatim buffer
       if q.empty?
-        verb << input[0] #if input[0]
+        verb << input[0].ord if input[0]
         input = input[1..-1]
       end
 
@@ -146,11 +148,11 @@ module RSmaz
     out = ""
     s = StringScanner.new(input)
     until s.eos?
-      bv = s.get_byte[0]
+      bv = s.get_byte[0].ord
       if (bv == 254) 
         out << s.get_byte
       elsif (bv == 255)
-        len = s.get_byte[0] + 1
+        len = s.get_byte[0].ord + 1
         len.times do 
           out << s.get_byte
         end

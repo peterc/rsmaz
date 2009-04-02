@@ -10,7 +10,7 @@ describe RSmaz do
     RSmaz.compress("thex").length.should == 3
   end
   
-  it "should compress and decompress strings to the same thing" do
+  it "should compress and decompress strings back to the same string" do
     [
       "This is a test.",
       "This is a test",
@@ -20,4 +20,7 @@ describe RSmaz do
     ].each { |str| RSmaz.decompress(RSmaz.compress(str)).should == str }    
   end
   
+  it "should properly decode a reference compression (so the internal coding doesn't change)" do
+    RSmaz.decompress("\020\230`A\376o\f\026\030").should == "hello world"
+  end
 end
