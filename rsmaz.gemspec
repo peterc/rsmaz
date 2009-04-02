@@ -2,12 +2,12 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rsmaz}
-  s.version = "0.0.2"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Peter Cooper"]
   s.date = %q{2009-04-02}
-  s.description = %q{Short String Compression for Ruby.  RSmaz is a pure-Ruby port of the Smaz short string compression algorithm by Salvatore Sanfilippo and released as a C library at: http://github.com/antirez/smaz/tree/master  I've done some initial cleanup of a pure Ruby->C port, but this is not yet complete. It does pass the specs, however!}
+  s.description = %q{Short String Compression for Ruby.  RSmaz is a pure-Ruby port of the Smaz short string compression algorithm by Salvatore Sanfilippo and released as a C library at: http://github.com/antirez/smaz/tree/master  I've done some initial cleanup of a pure Ruby->C port, but this is not yet complete. It does pass the specs, however! Feel free to clean it up as it's a bit memory inefficient right now... :)}
   s.email = ["pcooper@petercooper.co.uk"]
   s.extra_rdoc_files = ["History.txt", "Manifest.txt", "PostInstall.txt", "README.rdoc"]
   s.files = ["History.txt", "Manifest.txt", "PostInstall.txt", "README.rdoc", "Rakefile", "lib/rsmaz.rb", "script/console", "script/destroy", "script/generate", "spec/rsmaz_spec.rb", "spec/spec.opts", "spec/spec_helper.rb", "tasks/rspec.rake"]

@@ -8,7 +8,7 @@ class Fixnum; def ord; self; end; end
 
 # RSmaz is too small to bother splitting into separate files, so I'll be lazy..
 module RSmaz
-  VERSION = '0.0.2'
+  VERSION = '0.0.3'
   
   # From http://github.com/antirez/smaz/blob/4b913924e15b7663ee0240af19cedfd266052aab/smaz.c
   CODEBOOK = ["\002s,\266", "\003had\232\002leW", "\003on \216", "", "\001yS",
@@ -96,24 +96,25 @@ module RSmaz
       h3 = h2 ^ input[2].ord if (input.length > 2)
       q = []
 
-      [input.length, 7].min.downto(1) do |j2|
-        slot = if j2 == 1
+      [input.length, 7].min.downto(1) do |j|
+        slot = if j == 1
           CODEBOOK[h1 % 241]
-        elsif j2 == 2
-          CODEBOOK[h2 % 241] 
+        elsif j == 2
+          CODEBOOK[h2 % 241]
         else
-          CODEBOOK[h3 % 241] 
+          CODEBOOK[h3 % 241]
         end
 
         while (slot && slot[0]) do
-          if (slot[0].ord == j2 && (slot[1,j2] == input[0,j2]))
+          if (slot[0].ord == j && (slot[1,j] == input[0,j]))
             # Match found in hash table
             q << verb
             verb = ""
             q << slot[slot[0].ord+1].ord
-            input = input[j2..-1]
+            input = input[j..-1]
+            break
           else
-            slot = slot[2..-1]
+            slot = slot[1..-1]
           end
         end
       end
