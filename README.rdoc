@@ -27,7 +27,7 @@
   r = RSmaz.compress("whatever")
   puts RSmaz.decompress(r)
 
-== LICENSE:
+== RSMAZ LICENSE:
 
 Copyright (c) 2009 Peter Cooper, Salvatore Sanfilippo
 
