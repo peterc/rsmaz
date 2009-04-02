@@ -4,7 +4,11 @@ $:.unshift(File.dirname(__FILE__)) unless
 require 'strscan'
 
 # Silly hack to allow usage of String#ord in Ruby 1.9 without breaking Ruby 1.8
-class Fixnum; def ord; self; end; end
+if RUBY_VERSION < '1.9.0'
+  class String
+    def ord; self[0]; end;
+  end
+end  
 
 # RSmaz is too small to bother splitting into separate files, so I'll be lazy..
 module RSmaz
@@ -91,37 +95,38 @@ module RSmaz
     # This algorithm has been ported to Ruby from C and only
     # slightly Rubyized.. still a lonnnng way to go. Wanna give it a crack?
     while (input && input.length > 0)
-      h1 = h2 = input[0].ord << 3
-      h2 += input[1].ord if (input.length > 1)
-      h3 = h2 ^ input[2].ord if (input.length > 2)
+      h1 = h2 = input.ord << 3
+      h2 += input[1,1].ord if (input.length > 1)
+      h3 = h2 ^ input[2,1].ord if (input.length > 2)
       q = []
 
       [input.length, 7].min.downto(1) do |j|
         slot = if j == 1
-          CODEBOOK[h1 % 241]
+          CODEBOOK[h1 % 241].dup
         elsif j == 2
-          CODEBOOK[h2 % 241]
+          CODEBOOK[h2 % 241].dup
         else
-          CODEBOOK[h3 % 241]
+          CODEBOOK[h3 % 241].dup
         end
 
         while (slot && slot[0]) do
-          if (slot[0].ord == j && (slot[1,j] == input[0,j]))
+          if (slot.ord == j && (slot[1,j] == input[0,j]))
             # Match found in hash table
             q << verb
             verb = ""
-            q << slot[slot[0].ord+1].ord
+            q << slot[slot.ord+1,1].ord
             input = input[j..-1]
             break
           else
-            slot = slot[1..-1]
+            # This in-place hack is quicker than slot = slot[1..-1]
+            slot.reverse!.chop!.reverse!
           end
         end
       end
       
       # No queue? It means we matched nothing, so add the current byte to the verbatim buffer
       if q.empty?
-        verb << input[0].ord if input[0]
+        verb << input.ord if input[0]
         input = input[1..-1]
       end
 
@@ -129,6 +134,7 @@ module RSmaz
       # throw the verbatim buffer to the output queue
       q << verb if verb.length == 256 || (verb.length > 0 && input.length == 0)
  
+      # Turn the queue into correctly encoded data
       out << q.collect do |item|
         if item.class == String && item.length == 1
           "\376" + item
@@ -149,11 +155,11 @@ module RSmaz
     out = ""
     s = StringScanner.new(input)
     until s.eos?
-      bv = s.get_byte[0].ord
+      bv = s.get_byte.ord
       if (bv == 254) 
         out << s.get_byte
       elsif (bv == 255)
-        len = s.get_byte[0].ord + 1
+        len = s.get_byte.ord + 1
         len.times do 
           out << s.get_byte
         end

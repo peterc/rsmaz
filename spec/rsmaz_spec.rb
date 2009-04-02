@@ -2,6 +2,15 @@ require File.dirname(__FILE__) + '/spec_helper.rb'
 
 describe RSmaz do
   
+  before(:each) do
+    # Do some memory leak checking
+    puts "\nMemory used: #{memory_usage}K"
+  end
+  
+  after(:each) do
+    puts "\nMemory used: #{memory_usage}K"
+  end
+  
   it "should compress 'the' to one byte" do
     RSmaz.compress("the").length.should == 1
   end
@@ -27,6 +36,20 @@ describe RSmaz do
   it "should compress to the same extent as the reference smaz implementation" do
     RSmaz.compress("foobar").length.should == 4
     RSmaz.compress("Nel mezzo del cammin di nostra vita, mi ritrovai in una selva oscura").length.should == 46
+  end
+  
+  it "should compress and decompress lots of random strings without issues" do
+    100.times do
+      str = (1..100).map { |a| (rand(26)+97).chr }.join
+      RSmaz.decompress(RSmaz.compress(str)).length.should == str.length
+    end
+  end
+
+  it "should compress and decompress lots of random strings without issues (again)" do
+    100.times do
+      str = (1..100).map { |a| (rand(26)+97).chr }.join
+      RSmaz.decompress(RSmaz.compress(str)).length.should == str.length
+    end
   end
   
   
