@@ -21,6 +21,12 @@
 * Some strings to compress
 * A sense of humor
 
+== INSTALLATION:
+
+RSmaz is now on Gemcutter, so:
+
+  gem install rsmaz
+
 == USAGE:
 
   require 'rsmaz'
