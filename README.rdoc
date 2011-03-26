@@ -5,25 +5,22 @@
 
 == DESCRIPTION:
 
-  Short String Compression for Ruby.
+Short String Compression for Ruby.
 
-  RSmaz is a pure-Ruby port of the Smaz short string compression
-  algorithm by Salvatore Sanfilippo and released as a C library at:
-  http://github.com/antirez/smaz/tree/master
-  
-  I've done some initial cleanup of a pure Ruby->C port, but this
-  is not yet complete. It does pass the specs, however! Feel free
-  to clean it up as it's a bit memory inefficient right now... :)
+RSmaz is a pure-Ruby port of the Smaz short string compression
+algorithm by Salvatore Sanfilippo and released as a C library at:
+http://github.com/antirez/smaz/tree/master
+
+I've done some initial cleanup of a pure Ruby->C port, but this
+is not yet complete. It does pass the specs, however! Feel free
+to clean it up as it's a bit memory inefficient right now... :)
 
 == REQUIREMENTS:
 
 * RSpec (if you want to run the specs)
 * Some strings to compress
-* A sense of humor
 
 == INSTALLATION:
-
-RSmaz is now on Gemcutter, so:
 
   gem install rsmaz
 
@@ -45,7 +42,7 @@ RSmaz does not store information about the original encoding.
 
 == RSMAZ LICENSE:
 
-Copyright (c) 2009 Peter Cooper, Salvatore Sanfilippo
+Copyright (c) 2009-2011 Peter Cooper, Salvatore Sanfilippo, Hongli Lai
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
