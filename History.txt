@@ -1,3 +1,9 @@
+== 0.0.4 2011-03-26
+
+* Text forced to binary for a consistent Ruby 1.9 experience (Hongli Lai)
+* Dependency on hoe removed (Peter Cooper)
+* Switched from RSpec to MiniTest
+
 == 0.0.3 2009-04-02
 
 * Now produces same output as reference smaz implementation

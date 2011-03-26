@@ -17,8 +17,7 @@ to clean it up as it's a bit memory inefficient right now... :)
 
 == REQUIREMENTS:
 
-* RSpec (if you want to run the specs)
-* Some strings to compress
+* MiniTest (in the Ruby 1.9 stdlib or `gem install minitest` on Ruby 1.8)
 
 == INSTALLATION:
 
