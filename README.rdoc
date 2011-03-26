@@ -33,6 +33,16 @@ RSmaz is now on Gemcutter, so:
   r = RSmaz.compress("whatever")
   puts RSmaz.decompress(r)
 
+=== Ruby 1.9 and encodings
+
+RSmaz.compress always returns a string with the binary encoding. The
+input can be any encoding, it will internally force it to binary
+and compress byte-by-byte.
+
+RSmaz.decompress also always returns a string with the binary encoding.
+You must manually force the encoding back to the right one because
+RSmaz does not store information about the original encoding.
+
 == RSMAZ LICENSE:
 
 Copyright (c) 2009 Peter Cooper, Salvatore Sanfilippo

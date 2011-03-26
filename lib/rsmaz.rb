@@ -1,3 +1,4 @@
+# encoding: binary
 $:.unshift(File.dirname(__FILE__)) unless
   $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
@@ -86,11 +87,12 @@ module RSmaz
   " we", "ly", "ee", " n", "id", " cl", "ac", "il", "</", "rt", " wi", "div",
   "e, ", " it", "whi", " ma", "ge", "x", "e c", "men", ".com"]
   
-  # Compress a string to Smaz encoding
+  # Compress a string to Smaz encoding. On Ruby 1.9, the returned string
+  # has the binary encoding.
   def self.compress(input)
     verb = ""
     out = ""
-    input = input.dup
+    input = force_binary(input.dup)
     
     # This algorithm has been ported to Ruby from C and only
     # slightly Rubyized.. still a lonnnng way to go. Wanna give it a crack?
@@ -159,10 +161,13 @@ module RSmaz
     out
   end     
   
-  # Decompress a Smaz encoded string back to normal plain text
+  # Decompress a Smaz encoded string back to normal plain text.
+  # On Ruby 1.9, the returned string has the binary encoding. You
+  # must manually force the encoding back to the right one because
+  # RSmaz does not store information about the original encoding.
   def self.decompress(input)
     out = ""
-    s = StringScanner.new(input)
+    s = StringScanner.new(dup_and_force_binary(input))
     until s.eos?
       bv = s.get_byte.ord
       if (bv == 254) 
@@ -179,4 +184,23 @@ module RSmaz
     
     out
   end
+  
+  private
+    if ''.respond_to?(:encoding)
+      def self.force_binary(str)
+        str.force_encoding('binary')
+      end
+      
+      def self.dup_and_force_binary(str)
+        str.dup.force_encoding('binary')
+      end
+    else
+      def self.force_binary(str)
+        str
+      end
+      
+      def self.dup_and_force_binary(str)
+        str
+      end
+    end
 end

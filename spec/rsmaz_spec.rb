@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/spec_helper.rb'
+require File.expand_path(File.dirname(__FILE__) + '/spec_helper.rb')
 
 describe RSmaz do
   
@@ -52,5 +52,19 @@ describe RSmaz do
     end
   end
   
-  
+  if ''.respond_to?(:encoding)
+    # U+2603 = Unicode snowman
+    
+    it "should be able to compress strings with arbitrary encodings" do
+      RSmaz.decompress(RSmaz.compress("\u2603")).force_encoding('utf-8').should == "\u2603"
+    end
+    
+    it "should return binary strings upon compressing" do
+      RSmaz.compress("\u2603").encoding.should == Encoding.find('binary')
+    end
+    
+    it "should return binary strings upon decompressing" do
+      RSmaz.decompress(RSmaz.compress("\u2603")).encoding.should == Encoding.find('binary')
+    end
+  end
 end
