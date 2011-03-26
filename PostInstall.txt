@@ -1,6 +1,0 @@
-Code example:
-
-  require 'rsmaz'
-  RSmaz.decompress(RSmaz.compress("this is a test"))
-
-For more information on smaz in general, see http://github.com/antirez/smaz/tree/master
