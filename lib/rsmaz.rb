@@ -151,7 +151,7 @@ module RSmaz
           "\376" + item
         elsif item.class == String && item.length > 1
           "\377" + (item.length - 1).chr + item
-        elsif item.class == Fixnum
+        elsif item.class == Integer
           item.chr
         end
       end.join

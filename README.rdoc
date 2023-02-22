@@ -1,11 +1,12 @@
 = rsmaz
 
-* http://github.com/peterc/rsmaz/tree/master
+* https://github.com/abletech/rsmaz (this fork)
+* http://github.com/peterc/rsmaz/tree/master (original Ruby version)
 * http://github.com/antirez/smaz/tree/master (original C version)
 
 == DESCRIPTION:
 
-Short String Compression for Ruby.
+Short String Compression for Ruby. (This fork was made to get the parent rsmaz gem working on Ruby 3.2.1, more specifically to handle the deprecation of the Fixnum class)
 
 RSmaz is a pure-Ruby port of the Smaz short string compression
 algorithm by Salvatore Sanfilippo and released as a C library at:
@@ -17,11 +18,15 @@ to clean it up as it's a bit memory inefficient right now... :)
 
 == REQUIREMENTS:
 
-* MiniTest (in the Ruby 1.9 stdlib or `gem install minitest` on Ruby 1.8)
+* Ruby 3.2.1 or higher and MiniTest
 
 == INSTALLATION:
 
-  gem install rsmaz
+  Add the following line to your Gemfile:
+  ```
+    gem 'rsmaz', git: 'https://github.com/abletech/rsmaz'
+  ```
+  Then run `bundle install`
 
 == USAGE:
 
